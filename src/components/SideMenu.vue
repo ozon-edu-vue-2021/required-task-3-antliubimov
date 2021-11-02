@@ -24,7 +24,7 @@
                 :key="index"
                 :color="item.color"
                 :text="item.text"
-                :counter="item.counter"
+                :counter="tablesCount[index]"
                 class="legend__item"
               />
             </Draggable>
@@ -51,8 +51,9 @@
 import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
 import legend from "@/assets/data/legend.json";
+import tables from "@/assets/data/tables.json";
 import Draggable from "vuedraggable";
-import { Doughnut as PieChart } from "vue-chartjs";
+import { Pie as PieChart } from "vue-chartjs";
 import { format } from "date-fns";
 
 export default {
@@ -75,6 +76,7 @@ export default {
   data() {
     return {
       legend: [],
+      tablesCount: [],
     };
   },
   computed: {
@@ -84,6 +86,7 @@ export default {
   },
   created() {
     this.loadLegend();
+    this.countTables();
   },
   mounted() {
     this.makeChart();
@@ -96,7 +99,7 @@ export default {
           {
             label: "Легенда",
             backgroundColor: this.legend.map((legendItem) => legendItem.color),
-            data: this.legend.map((legendItem) => legendItem.counter),
+            data: this.tablesCount,
           },
         ],
       }; // информация, которую будем выводить
@@ -110,6 +113,15 @@ export default {
     },
     loadLegend() {
       this.legend = legend;
+    },
+    countTables() {
+      this.tablesCount = this.legend.map((legendItem) =>
+        tables.reduce(
+          (sum, curr) =>
+            curr.group_id === legendItem.group_id ? sum + 1 : sum,
+          0
+        )
+      );
     },
     closeProfile() {
       this.$emit("update:isUserOpenned", false);
