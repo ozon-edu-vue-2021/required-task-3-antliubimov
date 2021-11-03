@@ -24,7 +24,7 @@
                 :key="index"
                 :color="item.color"
                 :text="item.text"
-                :counter="tablesCount[index]"
+                :counter="item.counter"
                 class="legend__item"
               />
             </Draggable>
@@ -92,7 +92,10 @@ export default {
     this.makeChart();
   },
   updated() {
-    this.makeChart();
+    this.countTables();
+    if (!this.isUserOpenned) {
+      this.makeChart();
+    }
   },
   methods: {
     makeChart() {

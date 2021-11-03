@@ -4,7 +4,7 @@
 
     <div v-if="!isLoading" class="map-root">
       <MapSVG ref="svg" />
-      <Table v-show="false" ref="table" />
+      <Table v-show="false" ref="table" v-click-outside="hide" />
     </div>
     <div v-else>Loading...</div>
   </div>
@@ -16,8 +16,15 @@ import Table from "@/assets/images/workPlace.svg";
 import tables from "@/assets/data/tables.json";
 import legend from "@/assets/data/legend.json";
 import * as d3 from "d3";
+import ClickOutside from "vue-click-outside";
 
 export default {
+  props: {
+    isUserOpenned: {
+      type: Boolean,
+      default: false,
+    },
+  },
   components: {
     MapSVG,
     Table,
@@ -29,6 +36,7 @@ export default {
       g: null,
       tableSVG: null,
       tables: [],
+      currId: null,
     };
   },
   created() {
@@ -81,11 +89,19 @@ export default {
       });
     },
     showPersonCard(e) {
-      this.$emit(
-        "show-person-card",
-        e.target.parentNode.parentNode.parentNode.id
-      );
+      this.currId = e.target.parentNode.parentNode.parentNode.id;
+      this.$emit("show-person-card", this.currId);
     },
+    hide(e) {
+      if (e.target.parentNode.parentNode.parentNode.id !== this.currId) {
+        if (this.isUserOpenned) {
+          this.$emit("update:isUserOpenned", false);
+        }
+      }
+    },
+  },
+  directives: {
+    ClickOutside,
   },
 };
 </script>
