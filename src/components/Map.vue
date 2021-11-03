@@ -61,8 +61,9 @@ export default {
         const targetSeat = svgTablesGroupPlace
           .append("g")
           .attr("transform", `translate(${table.x}, ${table.y}) scale(0.5)`)
-          .attr("id", table.id)
-          .classed("employer-place", true);
+          .attr("id", table._id)
+          .classed("employer-place", true)
+          .on("click", this.showPersonCard);
 
         // устанавливает стол в группу
         targetSeat
@@ -78,6 +79,12 @@ export default {
               "transparent"
           );
       });
+    },
+    showPersonCard(e) {
+      this.$emit(
+        "show-person-card",
+        e.target.parentNode.parentNode.parentNode.id
+      );
     },
   },
 };

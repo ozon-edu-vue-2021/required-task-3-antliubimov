@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div class="office">
-      <Map />
-      <SideMenu />
+      <Map @show-person-card="showCard" :isUserOpenned.sync="isUserOpenned" />
+      <SideMenu :isUserOpenned.sync="isUserOpenned" :person="people[cardId]" />
     </div>
   </div>
 </template>
@@ -10,12 +10,32 @@
 <script>
 import Map from "./components/Map.vue";
 import SideMenu from "./components/SideMenu.vue";
+import people from "@/assets/data/people.json";
 
 export default {
   name: "App",
   components: {
     Map,
     SideMenu,
+  },
+  data() {
+    return {
+      cardId: "",
+      isUserOpenned: false,
+      people: [],
+    };
+  },
+  created() {
+    this.loadPeople();
+  },
+  methods: {
+    showCard(card) {
+      this.cardId = card;
+      this.isUserOpenned = true;
+    },
+    loadPeople() {
+      this.people = people;
+    },
   },
 };
 </script>

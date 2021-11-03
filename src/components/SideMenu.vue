@@ -91,6 +91,9 @@ export default {
   mounted() {
     this.makeChart();
   },
+  updated() {
+    this.makeChart();
+  },
   methods: {
     makeChart() {
       const legendChartData = {
