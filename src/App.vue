@@ -2,7 +2,7 @@
   <div id="app">
     <div class="office">
       <Map @show-person-card="showCard" :isUserOpenned.sync="isUserOpenned" />
-      <SideMenu :isUserOpenned.sync="isUserOpenned" :person="people[cardId]" />
+      <SideMenu :isUserOpenned.sync="isUserOpenned" :person="personInfo" />
     </div>
   </div>
 </template>
@@ -27,6 +27,11 @@ export default {
   },
   created() {
     this.loadPeople();
+  },
+  computed: {
+    personInfo() {
+      return people[this.cardId];
+    },
   },
   methods: {
     showCard(card) {
